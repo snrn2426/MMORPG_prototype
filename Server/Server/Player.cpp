@@ -32,7 +32,7 @@ Player::Player(const SOCKET & _socket, const Type_ID& index)
 	target_y = y = py; // 204.f;
 
 	vel = 3.f;
-	Hp = 100000;
+	Hp = 500;
 	str = 3;
 
 	WSAReceive();

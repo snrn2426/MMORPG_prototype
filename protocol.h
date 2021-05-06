@@ -25,7 +25,7 @@ constexpr Type_POS WORLD_MAP_SIZE_HEIGHT{ 1000 };
 constexpr size_t WORLD_MAP_SIZE{ (size_t)(WORLD_MAP_SIZE_WIDTH * WORLD_MAP_SIZE_HEIGHT) };
 
 // ** Object **
-constexpr size_t MAX_PLAYER{ 2001 };
+constexpr size_t MAX_PLAYER{ 3000 };
 constexpr size_t NUMBER_OF_MONSTER_TYPE1{ 13399 };
 constexpr size_t MAX_MONSTER_TYPE1{ MAX_PLAYER + NUMBER_OF_MONSTER_TYPE1 };
 constexpr size_t NUMBER_OF_MONSTER_TYPE2{ 13399 };
