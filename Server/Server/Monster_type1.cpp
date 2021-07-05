@@ -28,12 +28,12 @@ void Monster_type1::Set_Move_New_Target()
 	target_y += (float)rand_y;
 }
 
-Player* Monster_type1::Get_exist_target_object(std::vector<LF::shared_ptr<Player>*>& vec_sp_players)
+Player* Monster_type1::Get_exist_target_object(std::vector<LF::shared_ptr<Player>>& vec_sp_players)
 {
 	Type_ID curr_target_player_id{ target_player_id };
 	if (curr_target_player_id == -1)	return nullptr;
 
-	LF::shared_ptr<Player>* curr_p_sp_target_player{ ObjMgr->Get_Player(target_player_id) };
+	LF::shared_ptr<Player>* curr_p_sp_target_player{ &(ObjMgr->Get_Player(target_player_id)) };
 	if (curr_p_sp_target_player == nullptr) {
 		CAS_ID(&target_player_id, curr_target_player_id, -1);	return nullptr;
 	}
@@ -49,7 +49,7 @@ Player* Monster_type1::Get_exist_target_object(std::vector<LF::shared_ptr<Player
 		CAS_ID(&target_player_id, curr_target_player_id, -1);	return nullptr;
 	}
 
-	vec_sp_players.emplace_back(curr_p_sp_target_player);
+	vec_sp_players.emplace_back(*curr_p_sp_target_player);
 
 	return p_player;
 }
@@ -88,7 +88,7 @@ bool Monster_type1::Is_far_from_init_position()
 }
 
 RESULT_MONSTER_MOVE Monster_type1::Move_or_Attack
-	(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>& vec_objects, std::vector<LF::shared_ptr<Player>*>& vec_sp_players, Type_ID& target_playe_id, Type_Damage& damage)
+	(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>& vec_objects, std::vector<LF::shared_ptr<Player>>& vec_sp_players, Type_ID& target_playe_id, Type_Damage& damage)
 {
 	using namespace std;
 	using namespace chrono;

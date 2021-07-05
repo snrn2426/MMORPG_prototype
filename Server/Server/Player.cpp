@@ -65,7 +65,7 @@ Player::~Player()
 {}
 
 void Player::Get_Objects__Update_Near_set
-	(std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>>& vec_objects, std::vector<LF::shared_ptr<Player>*>& vec_p_sp_players)
+	(std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>>& vec_objects, std::vector<LF::shared_ptr<Player>>& vec_p_sp_players)
 {
 	std::vector<Sector_Base*> vec_near_sector{ SctMgr->Get_near_sector(x, y) };
 	
@@ -79,7 +79,7 @@ void Player::Get_Objects__Update_Near_set
 		for (const Type_ID& sector_obj_id : *sector) {
 
 			if (sector_obj_id < MAX_PLAYER) {
-				LF::shared_ptr<Player>* p_sp_player{ ObjMgr->Get_Player(sector_obj_id) };
+				LF::shared_ptr<Player>* p_sp_player{ &(ObjMgr->Get_Player(sector_obj_id)) };
 				if (p_sp_player == nullptr)		continue;
 
 				p_player = p_sp_player->get();
@@ -91,7 +91,7 @@ void Player::Get_Objects__Update_Near_set
 					delete p_sp_player;			continue;
 				}
 
-				vec_p_sp_players.emplace_back(p_sp_player);
+				vec_p_sp_players.emplace_back(*p_sp_player);
 				vec_objects.emplace_back(std::make_pair(p_player->id, RMOT_PLAYER_SIGHT_IN));
 			}
 
@@ -115,7 +115,7 @@ void Player::Get_Objects__Update_Near_set
 
 		if (near_obj_id < MAX_PLAYER) {
 
-			LF::shared_ptr<Player>* p_sp_player{ ObjMgr->Get_Player(near_obj_id) };
+			LF::shared_ptr<Player>* p_sp_player{ &(ObjMgr->Get_Player(near_obj_id)) };
 			if (p_sp_player == nullptr) {
 				vec_objects.emplace_back(std::make_pair(near_obj_id, RMOT_UNEXIST));
 				delete p_sp_player;		 continue;
@@ -137,7 +137,7 @@ void Player::Get_Objects__Update_Near_set
 			if (iter == vec_objects.end()) 
 				vec_objects.emplace_back(std::make_pair(near_obj_id, RMOT_PLAYER_SIGHT_OUT));
 
-			vec_p_sp_players.emplace_back(p_sp_player);
+			vec_p_sp_players.emplace_back(*p_sp_player);
 		}
 
 		else {
@@ -266,7 +266,7 @@ bool Player::TEST_Update_position()
 	}
 }
 
-void Player::Update_Near_set_Sight_in(std::vector<Object*>& vec_near_objects, std::vector<LF::shared_ptr<Player>*>& vec_near_player )
+void Player::Update_Near_set_Sight_in(std::vector<Object*>& vec_near_objects, std::vector<LF::shared_ptr<Player>>& vec_near_player )
 {
 	std::vector<Sector_Base*> vec_near_sector{ SctMgr->Get_near_sector(x, y) };
 	
@@ -280,7 +280,7 @@ void Player::Update_Near_set_Sight_in(std::vector<Object*>& vec_near_objects, st
 		for (const Type_ID& sector_obj_id : *sector) {
 			
 			if (sector_obj_id < MAX_PLAYER) {
-				LF::shared_ptr<Player>* p_sp_player{ ObjMgr->Get_Player(sector_obj_id) };
+				LF::shared_ptr<Player>* p_sp_player{ &(ObjMgr->Get_Player(sector_obj_id)) };
 				if (p_sp_player == nullptr)	continue;
 
 				p_player = p_sp_player->get();
@@ -292,7 +292,7 @@ void Player::Update_Near_set_Sight_in(std::vector<Object*>& vec_near_objects, st
 					delete p_sp_player;		continue;
 				}
 
-				vec_near_player.emplace_back(p_sp_player);
+				vec_near_player.emplace_back(*p_sp_player);
 				vec_near_objects.emplace_back(p_player);
 			}
 
@@ -408,7 +408,7 @@ RESULT_PLAYER_MOVE Player::Move()
 }
 
 RESULT_PLAYER_MOVE Player::TEST_Move
-	(std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>>& vec_objects, std::vector<LF::shared_ptr<Player>*>& vec_players)
+	(std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>>& vec_objects, std::vector<LF::shared_ptr<Player>>& vec_players)
 {
 	Type_POS pred_x{ x }, pred_y{ y };
 	RESULT_PLAYER_MOVE result;

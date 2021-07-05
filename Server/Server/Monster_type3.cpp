@@ -34,7 +34,7 @@ bool Monster_type3::Can_Move()
 	return false;
 }
 
-Player* Monster_type3::Get_Nearest_Player(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>& vec_objects, std::vector<LF::shared_ptr<Player>*>& vec_sp_players)
+Player* Monster_type3::Get_Nearest_Player(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>& vec_objects, std::vector<LF::shared_ptr<Player>>& vec_sp_players)
 {
 	std::vector<Sector_Base*> vec_near_sector{ SctMgr->Get_near_sector(x, y) };
 	Type_ID target_player_id{ -1 };
@@ -50,10 +50,10 @@ Player* Monster_type3::Get_Nearest_Player(std::vector<std::pair<Player*, RESULT_
 
 			if (MAX_PLAYER <= sector_object_id)	continue;
 
-			LF::shared_ptr<Player>* p_sp_near_player{ ObjMgr->Get_Player(sector_object_id) };
+			LF::shared_ptr<Player>* p_sp_near_player{ &(ObjMgr->Get_Player(sector_object_id)) };
 			if (p_sp_near_player == nullptr)	continue;
 
-			vec_sp_players.emplace_back(p_sp_near_player);
+			vec_sp_players.emplace_back(*p_sp_near_player);
 
 			p_player = p_sp_near_player->get();
 			if (p_player == nullptr) 			continue;
@@ -79,14 +79,14 @@ Player* Monster_type3::Get_Nearest_Player(std::vector<std::pair<Player*, RESULT_
 	if (target_player_id == -1) return nullptr;
 
 	else {
-		LF::shared_ptr<Player>* new_p_sp_target_player{ ObjMgr->Get_Player(target_player_id) };
+		LF::shared_ptr<Player>* new_p_sp_target_player{ &(ObjMgr->Get_Player(target_player_id)) };
 		if (new_p_sp_target_player == nullptr)	return nullptr;
 
 		p_player = new_p_sp_target_player->get();
 		if (p_player == nullptr) {
 			delete new_p_sp_target_player;		return nullptr;
 		}
-		vec_sp_players.emplace_back(new_p_sp_target_player);
+		vec_sp_players.emplace_back(*new_p_sp_target_player);
 
 		return p_player;
 	}
@@ -108,7 +108,7 @@ bool Monster_type3::Is_far_from_init_position()
 }
 
 RESULT_MONSTER_MOVE Monster_type3::Move_or_Attack
-(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>& vec_objects, std::vector<LF::shared_ptr<Player>*>& vec_sp_players, Type_ID& target_playe_id, Type_Damage& damage)
+(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>& vec_objects, std::vector<LF::shared_ptr<Player>>& vec_sp_players, Type_ID& target_playe_id, Type_Damage& damage)
 {
 	using namespace std;
 	using namespace chrono;

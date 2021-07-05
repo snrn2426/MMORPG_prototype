@@ -277,15 +277,14 @@ void Send_Manager::Notify_Player_Normal_Attack
 	for (const Type_ID& near_object_id : p_player->near_set) {
 		if (MAX_PLAYER <= near_object_id)	continue;
 
-		LF::shared_ptr<Player>* p_sp_near_player{ ObjMgr->Get_Player(near_object_id) };
+		LF::shared_ptr<Player>* p_sp_near_player{ &(ObjMgr->Get_Player(near_object_id)) };
 		if (p_sp_near_player == nullptr)	continue;
 
 		p_near_player = p_sp_near_player->get();
-		if (p_near_player == nullptr) {
-			delete p_sp_near_player;		continue;
-		}
 
-		Send_Packet(p_near_player, &packet__player_normal_attack, false);
+		if (p_near_player != nullptr) 
+			Send_Packet(p_near_player, &packet__player_normal_attack, false);
+		
 		delete p_sp_near_player;
 	}
 }
@@ -308,15 +307,14 @@ void Send_Manager::Notify_Player_Spell(Player* const p_player, Object* const p_m
 	for (const Type_ID& near_object_id : p_player->near_set) {
 		if (MAX_PLAYER <= near_object_id)	continue;
 
-		LF::shared_ptr<Player>* p_sp_near_player{ ObjMgr->Get_Player(near_object_id) };
+		LF::shared_ptr<Player>* p_sp_near_player{ &(ObjMgr->Get_Player(near_object_id)) };
 		if (p_sp_near_player == nullptr)	continue;
 
 		p_near_player = p_sp_near_player->get();
-		if (p_near_player == nullptr) {
-			delete p_sp_near_player;		continue;
-		}
 
-		Send_Packet(p_near_player, &packet__player_spell, false);
+		if (p_near_player != nullptr) 
+			Send_Packet(p_near_player, &packet__player_spell, false);
+
 		delete p_sp_near_player;
 	}
 }

@@ -202,21 +202,18 @@ void Server::Process_Accept()
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(socket_player), iocp, index, 0);
 
 		std::vector<Object*> vec_near_objects;
-		std::vector<LF::shared_ptr<Player>*> vec_near_players;
+		std::vector<LF::shared_ptr<Player>> vec_near_players;
 		p_player->Update_Near_set_Sight_in(vec_near_objects, vec_near_players);
 
 		SctMgr->insert(p_player);
 
 		SndMgr->Notify_Login_success(p_player, vec_near_objects);
-
-		for (LF::shared_ptr<Player>* sp_player : vec_near_players) 
-			delete sp_player;
 	}
 }
 
 void Server::Process_Receive(const Type_ID& id, DWORD _byte)
 {
-	LF::shared_ptr<Player>* sp_player{ ObjMgr->Get_Player(id) };
+	LF::shared_ptr<Player>* sp_player{ &(ObjMgr->Get_Player(id)) };
 	if (sp_player == nullptr)	return;
 
 	Player* p_player{ sp_player->get() };
@@ -274,31 +271,21 @@ void Server::Process__Packet_Move(Player* const p_player)
 
 	if (RPM_CORRECT == result) {
 		std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>> vec_objects;
-		std::vector<LF::shared_ptr<Player>*> vec_p_sp_players;
+		std::vector<LF::shared_ptr<Player>> vec_p_sp_players;
 
 		p_player->Get_Objects__Update_Near_set(vec_objects, vec_p_sp_players);
 
 		SndMgr->Notify_Player_Move(p_player, vec_objects);
-
-		for (LF::shared_ptr<Player>* sp_player : vec_p_sp_players)
-			delete sp_player;
-
-		return;
 	}
 
 	else if (RPM_MODIFY == result) {
 		std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>> vec_objects;
-		std::vector<LF::shared_ptr<Player>*> vec_p_sp_players;
+		std::vector<LF::shared_ptr<Player>> vec_p_sp_players;
 
 		p_player->Get_Objects__Update_Near_set(vec_objects, vec_p_sp_players);
 
 		SndMgr->Notify_Player_Move_Modify(p_player);
 		SndMgr->Notify_Player_Move(p_player, vec_objects);
-
-		for (LF::shared_ptr<Player>* sp_player : vec_p_sp_players)
-			delete sp_player;
-
-		return;
 	}
 
 	else if (RPM_INCORRECT == result) {
@@ -315,31 +302,21 @@ void Server::Process__Packet_Move_Target(Player* const p_player)
 
 	if (RPM_CORRECT == result) {
 		std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>> vec_objects;
-		std::vector<LF::shared_ptr<Player>*> vec_p_sp_players;
+		std::vector<LF::shared_ptr<Player>> vec_p_sp_players;
 
 		p_player->Get_Objects__Update_Near_set(vec_objects, vec_p_sp_players);
 
 		SndMgr->Notify_Player_Move_Target(p_player, vec_objects);
-
-		for (LF::shared_ptr<Player>* sp_player : vec_p_sp_players)
-			delete sp_player;
-
-		return;
 	}
 
 	else if (RPM_MODIFY == result) {
 		std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>> vec_objects;
-		std::vector<LF::shared_ptr<Player>*> vec_p_sp_players;
+		std::vector<LF::shared_ptr<Player>> vec_p_sp_players;
 
 		p_player->Get_Objects__Update_Near_set(vec_objects, vec_p_sp_players);
 
 		SndMgr->Notify_Player_Move_Modify(p_player);
 		SndMgr->Notify_Player_Move_Target(p_player, vec_objects);
-
-		for (LF::shared_ptr<Player>* sp_player : vec_p_sp_players)
-			delete sp_player;
-
-		return;
 	}
 
 	else if (RPM_INCORRECT == result) {
@@ -354,7 +331,7 @@ void Server::Process__Packet_TEST_Move(Player* const p_player)
 	if (false == p_player->Is_Time_Recv_Move_packet()) return;
 
 	std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>> vec_objects;
-	std::vector<LF::shared_ptr<Player>*> vec_sp_players;
+	std::vector<LF::shared_ptr<Player>> vec_sp_players;
 
 	RESULT_PLAYER_MOVE result{ p_player->TEST_Move(vec_objects, vec_sp_players) };
 
@@ -369,9 +346,6 @@ void Server::Process__Packet_TEST_Move(Player* const p_player)
 
 	else if (RPM_INCORRECT)
 		SndMgr->Notify_Player_Move_Incorrect(p_player);
-
-	for (LF::shared_ptr<Player>* sp_player : vec_sp_players)
-		delete sp_player;
 }
 
 void Server::Process__Packet_Normal_Attack(Player* const p_player)
@@ -415,7 +389,7 @@ void Server::Process_Monster_Move_Start(const Type_ID& id)
 	p_monster->Awake__Set_Move_target();
 
 	std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>> vec_players;
-	std::vector<LF::shared_ptr<Player>*> vec_sp_players;
+	std::vector<LF::shared_ptr<Player>> vec_sp_players;
 	Type_ID target_player_id;
 	Type_Damage damage{ 0 };
 
@@ -440,9 +414,6 @@ void Server::Process_Monster_Move_Start(const Type_ID& id)
 		TmrMgr->Push_Event_Monster_Move(p_monster);
 		SndMgr->Notify_Monster_Attack(p_monster, target_player_id, vec_players, damage);
 	}
-
-	for (LF::shared_ptr<Player>* sp_player : vec_sp_players)
-		delete sp_player;
 }
 
 void Server::Process_Monster_Move(const Type_ID& id)
@@ -452,7 +423,7 @@ void Server::Process_Monster_Move(const Type_ID& id)
 	if (true == p_monster->Is_die())	return;
 	
 	std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>> vec_players;
-	std::vector<LF::shared_ptr<Player>*> vec_sp_players;
+	std::vector<LF::shared_ptr<Player>> vec_sp_players;
 	Type_ID target_player_id;
 	Type_Damage damage{ 0 };
 
@@ -477,9 +448,6 @@ void Server::Process_Monster_Move(const Type_ID& id)
 		TmrMgr->Push_Event_Monster_Move(p_monster);
 		SndMgr->Notify_Monster_Attack(p_monster, target_player_id, vec_players, damage);
 	}
-
-	for (LF::shared_ptr<Player>* sp_player : vec_sp_players)
-		delete sp_player;
 }
 
 void Server::Process_Player_Respwan(const Type_ID& id)

@@ -19,7 +19,7 @@ public:
 	void Logout(Player* const);
 
 	Object*	Get_Object(const Type_ID&) const;
-	LF::shared_ptr<Player>* Get_Player(const Type_ID&);
+	LF::shared_ptr<Player>& Get_Player(const Type_ID&);
 
 private:
 	void insert(Object* const, const Type_ID&);

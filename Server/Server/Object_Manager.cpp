@@ -165,11 +165,7 @@ Object* Object_Manager::Get_Object(const Type_ID& id) const
 	return objects[id];
 }
 
-LF::shared_ptr<Player>* Object_Manager::Get_Player(const Type_ID& id)
+LF::shared_ptr<Player>& Object_Manager::Get_Player(const Type_ID& id)
 {
-	if (MAX_PLAYER <= id)	return nullptr;
-
-	LF::shared_ptr<Player>* new_p_sp{new LF::shared_ptr<Player>(players[id])};
-
-	return new_p_sp;
+	return *(new LF::shared_ptr<Player>(players[id]));
 }

@@ -7,7 +7,7 @@
 #include "Object_Manager.h"
 
 void Monster_Base::Get_Near_Player
-	(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>& vec_players, std::vector<LF::shared_ptr<Player>*>& vec_sp_players)
+	(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>& vec_players, std::vector<LF::shared_ptr<Player>>& vec_sp_players)
 {
 	std::vector<Sector_Base*> vec_near_sector{ SctMgr->Get_near_sector(x, y) };
 	Player* p_player;
@@ -20,13 +20,13 @@ void Monster_Base::Get_Near_Player
 
 			if (MAX_PLAYER <= sector_object_id)	continue;
 
-			LF::shared_ptr<Player>* p_sp_near_player{ ObjMgr->Get_Player(sector_object_id) };
+			LF::shared_ptr<Player>* p_sp_near_player{ &(ObjMgr->Get_Player(sector_object_id)) };
 			if (p_sp_near_player == nullptr)	continue;
 
 			p_player = p_sp_near_player->get();
 			if (p_player == nullptr) 			continue;
 			
-			vec_sp_players.emplace_back(p_sp_near_player);
+			vec_sp_players.emplace_back(*p_sp_near_player);
 
 			if (false == is_near(p_player))		continue;
 

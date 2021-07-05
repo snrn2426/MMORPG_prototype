@@ -19,7 +19,7 @@ public:
 	bool init_moving;
 
 protected:
-	void Get_Near_Player(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>&, std::vector<LF::shared_ptr<Player>*>&);
+	void Get_Near_Player(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>&, std::vector<LF::shared_ptr<Player>>&);
 	bool Is_Sleep__Update_Move(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>&);
 	virtual bool is_near(Object* const) override final;
 	bool is_near(Player* const);
@@ -44,7 +44,7 @@ public:
 	virtual std::chrono::milliseconds Get_Next_Attack_Cooltime() const = 0;
 
 	void Set_move_init_position();
-	virtual RESULT_MONSTER_MOVE Move_or_Attack(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>&, std::vector<LF::shared_ptr<Player>*>&, Type_ID&, Type_Damage&) = 0;
+	virtual RESULT_MONSTER_MOVE Move_or_Attack(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>&, std::vector<LF::shared_ptr<Player>>&, Type_ID&, Type_Damage&) = 0;
 	virtual std::chrono::milliseconds Get_respwan_time() const override final;
 
 	virtual Type_Hp	Get_init_hp() const = 0;

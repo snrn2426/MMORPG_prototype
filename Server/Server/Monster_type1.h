@@ -15,13 +15,13 @@ public:
 
 private:
 	void Set_Move_New_Target();
-	Player* Get_exist_target_object(std::vector<LF::shared_ptr<Player>*>&);
+	Player* Get_exist_target_object(std::vector<LF::shared_ptr<Player>>&);
 	bool Can_Move();
 
 public:
 	virtual void Awake__Set_Move_target() override final;
 	virtual bool Is_far_from_init_position() override final;
-	virtual RESULT_MONSTER_MOVE Move_or_Attack(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>&, std::vector<LF::shared_ptr<Player>*>&, Type_ID&, Type_Damage&) override final;
+	virtual RESULT_MONSTER_MOVE Move_or_Attack(std::vector<std::pair<Player*, RESULT_MOVE_OBJECT_TYPE>>&, std::vector<LF::shared_ptr<Player>>&, Type_ID&, Type_Damage&) override final;
 	virtual Type_POS Get_Size() const override final;
 	virtual std::chrono::milliseconds Get_Next_Move_Cooltime() const override final;
 	virtual std::chrono::milliseconds Get_Next_Attack_Cooltime() const override final;

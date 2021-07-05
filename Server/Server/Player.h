@@ -50,8 +50,8 @@ public:
 	bool Is_Time_Recv_SPELL();
 	bool TEST_Move_packet();
 	
-	void Update_Near_set_Sight_in(std::vector<Object*>&, std::vector<LF::shared_ptr<Player>*>&);
-	void Get_Objects__Update_Near_set(std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>>&, std::vector<LF::shared_ptr<Player>*>&);
+	void Update_Near_set_Sight_in(std::vector<Object*>&, std::vector<LF::shared_ptr<Player>>&);
+	void Get_Objects__Update_Near_set(std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>>&, std::vector<LF::shared_ptr<Player>>&);
 
 public:
 	SOCKET	Get_Socket() const;
@@ -66,7 +66,7 @@ public:
 	virtual bool Is_Player() override final;
 	virtual Type_POS Get_Size() const override final;
 	RESULT_PLAYER_MOVE Move();
-	RESULT_PLAYER_MOVE TEST_Move(std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>>&, std::vector<LF::shared_ptr<Player>*>&);
+	RESULT_PLAYER_MOVE TEST_Move(std::vector<std::pair<Type_ID, RESULT_MOVE_OBJECT_TYPE>>&, std::vector<LF::shared_ptr<Player>>&);
 	virtual std::chrono::milliseconds Get_respwan_time() const override final;
 
 	Type_Damage Normal_Attack(Object* const);
